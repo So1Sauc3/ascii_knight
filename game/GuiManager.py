@@ -93,10 +93,14 @@ class GuiManager:
         self.cls()
         for r in self.getScreen("gamePaused"): print(r)
     
-    def gameOver(self):
+    def gameOver(self, save, h, c):
         self.cls()
-        for r in self.getScreen("gameOver"): print(r)
-    
+        s = self.getScreen("gameOver")
+        s[2] = s[2].replace("_", f"{str(save):>15}")
+        s[4] = s[4].replace("_", f"{str(h):>4}")
+        s[5] = s[5].replace("_", f"{str(c):>4}")
+        
+        for r in s: print(r)
     def endCredits(self):
         self.cls()
         for r in self.getScreen("endCredits"): print(r)

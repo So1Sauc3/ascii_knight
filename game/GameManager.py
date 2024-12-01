@@ -155,3 +155,25 @@ class GameManager:
         if self.attackTimer<self.ATTACKCOOLDOWN: self.attackTimer += 1
         
         return uOut, eOut
+    
+    def save(self, counter):
+        """
+        Saves the game state to a file named "save<counter>.txt" in the "saves" directory.
+
+        Parameters:
+            counter (int): The number of the save to write.
+
+        Returns:
+            None
+        """
+        with open(f"saves/save{str(counter)}.txt", "w") as f:
+            f.write(f"Save #{str(counter)}\n\n")
+            f.write(f"Health: {self.h}\nMana: {self.m}\nCoins: {self.c}\n\n")
+            f.write(f"Floor Position: {self.fPos}\nRoom Position: {self.rPos}\nPlayer Position: {self.pPos}\n\n")
+            f.write(f"Entity Timer: {self.entityTimer}\nAttack Timer: {self.attackTimer}\n\n")
+            f.write("Floor Layout:\n")
+            for r in self.f.floor:
+                for room in r:
+                    if room: f.write(f"[{room.roomType}] ")
+                    else: f.write("[    ] ")
+                f.write("\n")

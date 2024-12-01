@@ -36,8 +36,12 @@ input_thread.daemon = True
 input_thread.start()
 display = gui.GuiManager(10, 10)
 
+with open("saves/save0.txt", "w") as f:
+    f.write("test")
+
 # THE GAME ########################################################
 while True:
+    gCounter = 0
     # MENU SCREEN #################################################
     display.menu()
     match keyboard.read_key():
@@ -67,9 +71,11 @@ while True:
                 if "dead" in (uOut, eOut): break
                 t.sleep(REFRESH_RATE)
             # GAME OVER ###########################################
-            display.gameOver()
+            gCounter+=1
+            game.save(gCounter)
+            display.gameOver(f"save{gCounter}.txt", game.h, game.c)
             while keyin.get()!="esc":
-                display.gameOver()
+                display.gameOver(f"save{gCounter}.txt", game.h, game.c)
                 t.sleep(REFRESH_RATE)
         # EXIT ####################################################
         case "x":

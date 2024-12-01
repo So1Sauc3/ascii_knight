@@ -1,0 +1,22 @@
+Save #1
+
+Health: 10
+Mana: 20
+Coins: 0
+
+Floor Position: 0
+Room Position: (3, 3)
+
+Player Position: (4, 4)
+
+Entity Timer: 16
+Attack Timer: 5
+
+Floor Layout:
+[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
+[    ] [    ] [    ] [    ] [f0r2] [    ] [    ] 
+[    ] [f0r1] [f0r0] [f0r3] [f0r1] [f0r2] [    ] 
+[    ] [f0r3] [f0r3] [f0r0] [f0r0] [    ] [    ] 
+[    ] [f0r0] [f0r0] [f0r2] [f0r0] [f0r2] [    ] 
+[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
+[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
