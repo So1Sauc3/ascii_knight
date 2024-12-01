@@ -6,6 +6,19 @@ menu
 |#| EXIT         [X]     |#|
 \-"----------------------"-/
 
+loadGame
+.--------------------------*
+|      LOAD SAVE FILE      |
+:-'----------------------'-;
+
+saveFile
+|#| _ @ |#|
+
+loadGameExit
+:-+----------------------+-;
+|#| EXIT         [ESC]   |#|
+\-"----------------------"-/
+
 gameScreenTop
 .--------------------------*
 |Health  _|
@@ -34,8 +47,8 @@ gameOver
 |         GAME OVER        |
 | save file_ |
 :-'----------------------'-;
-|#| Health remaining_ |#|
-|#| Coins collected _ |#|
+|#| HEALTH REMAINING_ |#|
+|#| COINS COLLECTED _ |#|
 :-+----------------------+-;
 |#| EXIT         [ESC]   |#|
 \-"----------------------"-/

@@ -36,51 +36,49 @@ input_thread.daemon = True
 input_thread.start()
 display = gui.GuiManager(10, 10)
 
-with open("saves/save0.txt", "w") as f:
-    f.write("test")
-
 # THE GAME ########################################################
 while True:
     gCounter = 0
     # MENU SCREEN #################################################
     display.menu()
-    match keyboard.read_key():
-        # NEW GAME ################################################
-        case "enter":
-            game = GameManager()
-            escaped = False
-            # GAME LOOP ###########################################
-            while True:
-                # input
-                k = keyin.get() if not keyin.empty() else None
-                # escape menu logic
-                if k=="esc": escaped = True
-                if escaped and k=="enter": escaped = False
-                if escaped and k=="x": break
-                
-                # ESCAPED #########################################
-                if escaped:
-                    display.escaped()
-                # RUNNING #########################################
-                else:
-                    uOut, eOut = game.tick(k)
-                    display.game(game, uOut, eOut)
-                
-                if "hitEntity" in (uOut, eOut): t.sleep(HIT_PAUSE)
-                if "dmged" in (uOut, eOut): t.sleep(HIT_PAUSE)
-                if "dead" in (uOut, eOut): break
-                t.sleep(REFRESH_RATE)
-            # GAME OVER ###########################################
-            gCounter+=1
-            game.save(gCounter)
+    menuInput = keyboard.read_key()
+    # NEW GAME ####################################################
+    if menuInput == "enter" or menuInput == "l":
+        if menuInput == "l": game = GameManager("saves/save1.txt")
+        else: game = GameManager()
+        escaped = False
+        # GAME LOOP ###############################################
+        while True:
+            # input
+            k = keyin.get() if not keyin.empty() else None
+            # escape menu logic
+            if k=="esc": escaped = True
+            if escaped and k=="enter": escaped = False
+            if escaped and k=="x": break
+            
+            # ESCAPED #############################################
+            if escaped:
+                display.escaped()
+            # RUNNING #############################################
+            else:
+                uOut, eOut = game.tick(k)
+                display.game(game, uOut, eOut)
+            
+            if "hitEntity" in (uOut, eOut): t.sleep(HIT_PAUSE)
+            if "dmged" in (uOut, eOut): t.sleep(HIT_PAUSE)
+            if "dead" in (uOut, eOut): break
+            t.sleep(REFRESH_RATE)
+        # GAME OVER ###############################################
+        gCounter+=1
+        game.save(gCounter)
+        display.gameOver(f"save{gCounter}.txt", game.h, game.c)
+        while keyin.get()!="esc":
             display.gameOver(f"save{gCounter}.txt", game.h, game.c)
-            while keyin.get()!="esc":
-                display.gameOver(f"save{gCounter}.txt", game.h, game.c)
-                t.sleep(REFRESH_RATE)
-        # EXIT ####################################################
-        case "x":
-            display.endCredits()
-            break
+            t.sleep(REFRESH_RATE)
+    # EXIT ########################################################
+    if menuInput == "x":
+        display.endCredits()
+        break
 
 # # UNSUSED DEBUG FUNCTION
 # def printFloor(f, floorsize, roomSize):

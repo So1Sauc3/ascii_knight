@@ -1,10 +1,11 @@
+from os import path
 from Floor import Floor
 
 class GameManager:
     ENTITYTICKDELAY = 20
     ATTACKCOOLDOWN = 5
     
-    def __init__(self):
+    def __init__(self, fileName=None):
         """
         Constructor for GameManager.
 
@@ -12,19 +13,38 @@ class GameManager:
         Sets player's health, mana, and coins to 10, 20, and 0, respectively.
         Sets entity and attack timers to 0.
         """
-        self.dungeon = [Floor(0, "f0")]
-        
-        self.fPos = 0
-        self.f = self.dungeon[self.fPos]
-        
-        self.rPos = (Floor.STARTINGROOMX, Floor.STARTINGROOMY)
-        self.r = self.f.floor[self.rPos[0]][self.rPos[0]]
-        
-        self.pPos = (len(self.r.room)//2, len(self.r.room)//2)
-        
-        self.h, self.m, self.c = 10, 20, 0
-        
-        self.entityTimer, self.attackTimer = 1, 1
+        if fileName!=None:
+            self.load(fileName)
+            pass
+        else:
+            self.dungeon = [Floor(0, "f0")]
+            self.fPos = 0
+            self.f = self.dungeon[self.fPos]
+            self.rPos = (Floor.STARTINGROOMX, Floor.STARTINGROOMY)
+            self.r = self.f.floor[self.rPos[0]][self.rPos[0]]
+            self.pPos = (len(self.r.room)//2, len(self.r.room)//2)
+            self.h, self.m, self.c = 10, 20, 0
+            self.entityTimer, self.attackTimer = 1, 1
+    
+    def load(self, fileName):
+        with open(fileName, "r") as f:
+            data = f.read().split("\n\n")
+            stats = [row.split(":")[1] for row in data[1].split("\n")] # h m c
+            pos = [row.split(":")[1] for row in data[2].split("\n")] # fPos rPos pPos
+            timers = [row.split(":")[1] for row in data[3].split("\n")] # entityTimer attackTimer
+            floorGrid = [row.split(" ") for row in data[4].split("\n")[1:-1]] # floor layout, id:roomType
+            
+            self.h, self.m, self.c = int(stats[0]), int(stats[1]), int(stats[2])
+            self.fPos = int(pos[0])
+            self.rPos = (int(pos[1].split(",")[0]), int(pos[1].split(",")[1]))
+            self.pPos = (int(pos[2].split(",")[0]), int(pos[2].split(",")[1]))
+            self.entityTimer, self.attackTimer = int(timers[0]), int(timers[1])
+            
+            # load floor
+            self.dungeon = [Floor(0, "f0", floorGrid)]
+            self.f = self.dungeon[self.fPos]
+            self.r = self.f.floor[self.rPos[0]][self.rPos[0]]
+        return
     
     def atb(self, atb, val, change=True):
         """
@@ -168,12 +188,12 @@ class GameManager:
         """
         with open(f"saves/save{str(counter)}.txt", "w") as f:
             f.write(f"Save #{str(counter)}\n\n")
-            f.write(f"Health: {self.h}\nMana: {self.m}\nCoins: {self.c}\n\n")
-            f.write(f"Floor Position: {self.fPos}\nRoom Position: {self.rPos}\nPlayer Position: {self.pPos}\n\n")
-            f.write(f"Entity Timer: {self.entityTimer}\nAttack Timer: {self.attackTimer}\n\n")
+            f.write(f"Health:{self.h}\nMana:{self.m}\nCoins:{self.c}\n\n")
+            f.write(f"Floor Position:{self.fPos}\nRoom Position:{self.rPos[0]},{self.rPos[1]}\nPlayer Position:{self.pPos[0]},{self.pPos[1]}\n\n")
+            f.write(f"Entity Timer:{self.entityTimer}\nAttack Timer:{self.attackTimer}\n\n")
             f.write("Floor Layout:\n")
             for r in self.f.floor:
                 for room in r:
-                    if room: f.write(f"[{room.roomType}] ")
-                    else: f.write("[    ] ")
+                    if room: f.write(f"{room.id}:{room.roomType}:{("".join(room.connections)+"____")[:4]} ")
+                    else: f.write("0:NONE:NONE ")
                 f.write("\n")

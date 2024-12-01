@@ -1,22 +1,21 @@
 Save #1
 
-Health: 10
-Mana: 20
-Coins: 0
+Health:8
+Mana:15
+Coins:3
 
-Floor Position: 0
-Room Position: (3, 3)
+Floor Position:0
+Room Position:3,3
+Player Position:5,5
 
-Player Position: (4, 4)
-
-Entity Timer: 16
-Attack Timer: 5
+Entity Timer:17
+Attack Timer:5
 
 Floor Layout:
-[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
-[    ] [    ] [    ] [    ] [f0r2] [    ] [    ] 
-[    ] [f0r1] [f0r0] [f0r3] [f0r1] [f0r2] [    ] 
-[    ] [f0r3] [f0r3] [f0r0] [f0r0] [    ] [    ] 
-[    ] [f0r0] [f0r0] [f0r2] [f0r0] [f0r2] [    ] 
-[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
-[    ] [    ] [    ] [    ] [    ] [    ] [    ] 
+0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 3:f0r0:E___ 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 3:f0r1:S___ 2:f0r0:ENW_ 3:f0r2:E___ 0:NONE:NONE 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 1:f0r3:EWS_ 2:f0r1:NWS_ 3:f0r2:N___ 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 1:f0r3:S___ 0:f0r0:ENWS 1:f0r0:EN__ 0:NONE:NONE 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 1:f0r2:W___ 2:f0r3:EWS_ 3:f0r0:N___ 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 3:f0r2:W___ 0:NONE:NONE 0:NONE:NONE 
+0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 0:NONE:NONE 

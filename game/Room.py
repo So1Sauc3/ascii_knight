@@ -65,7 +65,8 @@ class Room:
             directions (str): A string of directions to add to the room's connections.
         """
         if directions==None: return # maybe a try catch here
-        for d in set(directions): self.connections.append(d.upper())
+        for d in set(directions):
+            if d.upper() in "NESW": self.connections.append(d.upper())
     
     def removeConnections(self, directions):
         """

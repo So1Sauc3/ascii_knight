@@ -8,7 +8,7 @@ class Floor:
     STARTINGROOMX = MAXFLOORSIZE//2
     STARTINGROOMY = MAXFLOORSIZE//2
     
-    def __init__(self, id, floorType):
+    def __init__(self, id, floorType, floorGrid=None):
         """
         Parameters:
             id (int): id of the floor
@@ -21,7 +21,7 @@ class Floor:
         """
         self.id = id
         self.floorType = floorType
-        self.floor = self.generateFloor()
+        self.floor = self.loadFloor(floorGrid) if floorGrid!=None else self.generateFloor()
     
     def generateFloor(self):
         """
@@ -32,6 +32,29 @@ class Floor:
         """
         roomGrid = [[None for _ in range(self.MAXFLOORSIZE)] for _ in range(self.MAXFLOORSIZE)]
         self.recurseRooms(roomGrid, list(Room.roomDict.keys()), self.STARTINGROOMX, self.STARTINGROOMY, 0)
+        return roomGrid
+    
+    def loadFloor(self, floorGrid):
+        """
+        Loads a floor layout from a 2d list of strings. Each string should be in the format "id:roomType:connections"
+        where id is the id of the room, roomType is the type of room (e.g. "f0r0"), and connections is a string of
+        directions (e.g. "N E S W") indicating which directions the room connects to other rooms.
+        
+        Parameters:
+            floorGrid (list): 2d list of strings, each string representing a room in the format "id:roomType:connections"
+        
+        Returns:
+            list: 2d list of Room objects, representing the loaded floor layout
+        """
+        roomGrid = [[None for _ in range(self.MAXFLOORSIZE)] for _ in range(self.MAXFLOORSIZE)]
+        for r in range(len(floorGrid)):
+            for c in range(len(floorGrid[0])-1):
+                print(floorGrid[r][c])
+                print(floorGrid[r][c].split(":")[1])
+                id, roomType, connections = floorGrid[r][c].split(":")
+                if roomType=="NONE": continue
+                roomGrid[r][c] = Room(id, roomType)
+                roomGrid[r][c].addConnections(connections)
         return roomGrid
     
     def recurseRooms(self, grid, roomDict, x, y, depth=0, oldDir=None):
