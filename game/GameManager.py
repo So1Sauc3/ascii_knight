@@ -4,6 +4,7 @@ from Floor import Floor
 class GameManager:
     ENTITYTICKDELAY = 20
     ATTACKCOOLDOWN = 5
+    COMBOLENGTH = 3
     
     def __init__(self, fileName=None):
         """
@@ -17,14 +18,14 @@ class GameManager:
             self.load(fileName)
             pass
         else:
+            self.h, self.m, self.c = 10, 20, 0
             self.dungeon = [Floor(0, "f0")]
             self.fPos = 0
             self.f = self.dungeon[self.fPos]
             self.rPos = (Floor.STARTINGROOMX, Floor.STARTINGROOMY)
             self.r = self.f.floor[self.rPos[0]][self.rPos[0]]
             self.pPos = (len(self.r.room)//2, len(self.r.room)//2)
-            self.h, self.m, self.c = 10, 20, 0
-            self.entityTimer, self.attackTimer = 1, 1
+            self.entityTimer, self.attackTimer, self.combo = 1, 1, 0
     
     def load(self, fileName):
         with open(fileName, "r") as f:
@@ -38,7 +39,8 @@ class GameManager:
             self.fPos = int(pos[0])
             self.rPos = (int(pos[1].split(",")[0]), int(pos[1].split(",")[1]))
             self.pPos = (int(pos[2].split(",")[0]), int(pos[2].split(",")[1]))
-            self.entityTimer, self.attackTimer = int(timers[0]), int(timers[1])
+            
+            self.entityTimer, self.attackTimer, self.combo = int(timers[0]), int(timers[1]), 0
             
             # load floor
             self.dungeon = [Floor(0, "f0", floorGrid)]
@@ -120,13 +122,19 @@ class GameManager:
             str: "attackFailed" if no entities were hit, "hitEntity" if an entity was hit, or "cantAttack" if the player is on cooldown.
         """
         # basic attack logic, may implement spells in future
-        if self.attackTimer%self.ATTACKCOOLDOWN==0:
+        if self.attackTimer%GameManager.ATTACKCOOLDOWN==0:
             eOuts = "attackFailed"
             for e in self.r.entities:
                 for d in [(-1,0),(0,-1),(1,0),(0,1)]:
                     if e.pos==(self.pPos[0]+d[0], self.pPos[1]+d[1]): eOuts = e.atb("h", -10)
             self.attackTimer = 1
-            self.atb("m", -1) # *eOuts.count("hitEntity")
+            
+            if self.combo==GameManager.COMBOLENGTH:
+                self.combo = 0
+                self.atb("m", 20, False)
+            else:
+                self.combo += 1
+                self.atb("m", -1)
             return eOuts
         return "cantAttack"
     
@@ -170,7 +178,9 @@ class GameManager:
         if self.entityTimer%self.ENTITYTICKDELAY==0:
             entityOut = self.r.tickEntities(self.pPos)
             for out in entityOut:
-                if out=="hitPlayer": eOut = self.atb("h", -1)
+                if out=="hitPlayer":
+                    self.combo = 0
+                    eOut = self.atb("h", -1)
                 if out=="dead": self.atb("c", 1)
             self.entityTimer = 1
         

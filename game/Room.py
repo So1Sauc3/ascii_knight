@@ -27,7 +27,8 @@ class Room:
         self.room = self.generateRoom(roomType)
         self.roomType = roomType
         self.connections = []
-        self.entities = self.placeEntities() if roomType not in self.NOENTITYROOMS else []
+        self.entities = []
+        if self.id!=0: self.entities = self.placeEntities() if roomType not in self.NOENTITYROOMS else []
     def generateRoom(self, roomType):
         """
         Generates a room based on the given roomType. The roomType should be

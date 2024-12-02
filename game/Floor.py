@@ -3,7 +3,7 @@ from Room import Room
 
 class Floor:
     # constants
-    MAXDEPTH = 3
+    MAXDEPTH = 5
     MAXFLOORSIZE = MAXDEPTH*2+1
     STARTINGROOMX = MAXFLOORSIZE//2
     STARTINGROOMY = MAXFLOORSIZE//2
@@ -49,8 +49,6 @@ class Floor:
         roomGrid = [[None for _ in range(self.MAXFLOORSIZE)] for _ in range(self.MAXFLOORSIZE)]
         for r in range(len(floorGrid)):
             for c in range(len(floorGrid[0])-1):
-                print(floorGrid[r][c])
-                print(floorGrid[r][c].split(":")[1])
                 id, roomType, connections = floorGrid[r][c].split(":")
                 if roomType=="NONE": continue
                 roomGrid[r][c] = Room(id, roomType)
