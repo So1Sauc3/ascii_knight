@@ -13,6 +13,7 @@ import GuiManager as gui
 import time as t
 import threading
 import queue as q
+from os import scandir
 
 # constants
 REFRESH_RATE = 0.04
@@ -21,7 +22,6 @@ HIT_PAUSE = 0.5
 
 # global variables
 keyin = q.Queue()
-gCounter = 0
 
 # input listen thread
 def input_listen():
@@ -54,23 +54,26 @@ while True:
     # NEW GAME ####################################################
     if menuInput == "enter" or menuInput == "l":
         # LOAD PREVIOUS SAVE ######################################
-        loadGame = False
-        loadedSave = gCounter # add proper save saving later
+        loadGame = True
+        saveID = 0
         if menuInput == "l":
             while True:
                 k = keyin.get() if not keyin.empty() else None
                 if k=="esc":
+                    loadGame = False
                     break
                 if k and k.isdigit():
                     try:
                         game = GameManager(f"saves/save{int(k)}")
-                        loadGame = True
-                        loadedSave = int(k)
+                        saveID = int(k)
                         break
                     except: pass
                 display.loadGame()
                 t.sleep(REFRESH_RATE)
-        else: game = GameManager()
+        else:
+            game = GameManager()
+            saveID = len([e.name for e in scandir("saves") if e.is_file()])
+        
         escaped = False
         # GAME LOOP ###############################################
         while loadGame:
@@ -95,11 +98,10 @@ while True:
             t.sleep(REFRESH_RATE)
         # GAME OVER ###############################################
         if loadGame:
-            gCounter+=1
-            game.save(gCounter)
-            display.gameOver(f"save{gCounter}.txt", game.h, game.c)
+            game.save(saveID)
+            display.gameOver(f"save{saveID}.txt", game.h, game.c)
             while keyin.get()!="esc":
-                display.gameOver(f"save{gCounter}.txt", game.h, game.c)
+                display.gameOver(f"save{saveID}.txt", game.h, game.c)
                 t.sleep(REFRESH_RATE)
     # EXIT ########################################################
     if menuInput == "x":

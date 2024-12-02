@@ -53,7 +53,7 @@ class Room:
         # row col traverse, place entity according to density
         for x in range(len(self.room)):
             for y in range(len(self.room[x])):
-                if self.room[x][y].char==" " and randrange(0,100)<Room.ENEMYDENSITY:
+                if self.room[x][y].id==" " and randrange(0,100)<Room.ENEMYDENSITY:
                     entities.append(Entity(choice(Room.ENTITYCHARS), 10, (x,y))) # assign random char
         return entities
     def addConnections(self, directions):

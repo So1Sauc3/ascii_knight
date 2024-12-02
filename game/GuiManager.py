@@ -80,6 +80,11 @@ class GuiManager:
             y+=10*len([p for p in movingPositions if p[0][0]==x and p[0][1]<y]) # correcting entity colorama code offset
             roomDisplay[x] = roomDisplay[x][:y]+ch+roomDisplay[x][y+1:]
         
+        exitRow = -1
+        for i in range(len(roomDisplay)):
+            if roomDisplay[i].find(chr(9094))>0: exitRow = i
+            roomDisplay[i] = roomDisplay[i].replace(chr(9094), Fore.CYAN+chr(9094)+Fore.RESET)
+        
         # GUI sections
         top = self.getScreen("gameScreenTop")
         top[1] = top[1].replace("_", f"{str(h):>18}")
@@ -91,7 +96,7 @@ class GuiManager:
         # stitch together
         for i in range(len(roomDisplay)):
             eXs = len([p for p in movingPositions if p[0][0]==i])
-            #if i==x: eXs+=1
+            if i==exitRow: eXs+=1
             width = 22+10*eXs
             roomDisplay[i] = edge[0] + roomDisplay[i].center(width) + edge[0]
         

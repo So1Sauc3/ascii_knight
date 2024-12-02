@@ -99,14 +99,17 @@ class GameManager:
         if self.r.room[nPos[0]][nPos[1]].id=="d" and self.f.enterDoor(self.rPos[0], self.rPos[1], dy, dx, key):
             self.rPos = (self.rPos[0]+dy, self.rPos[1]+dx)
             self.r = self.f.floor[self.rPos[0]][self.rPos[1]]
-            l = len(self.r.room)
-            self.pPos = (l//2-dx*(l//2-1), l//2-dy*(l//2-1))
+            l,w = len(self.r.room), len(self.r.room[0])
+            self.pPos = (l//2-dx*(l//2-1), w//2-dy*(w//2-1))
             
             # remove entity if noclipping into player, janky solution!
             for e in self.r.entities:
                 if e.pos==self.pPos:
                     self.r.entities.remove(e)
             return "enteredRoom"
+        if self.r.room[nPos[0]][nPos[1]].id=="$": # special exit
+            self.atb("c", 20)
+            return "dead"
         return "moveFailed"
     
     def attack(self):
