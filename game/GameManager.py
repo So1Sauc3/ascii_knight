@@ -13,7 +13,7 @@ class GameManager:
         Sets player's health, mana, and coins to 10, 20, and 0, respectively.
         Sets entity and attack timers to 0.
         """
-        if fileName!=None:
+        if fileName!=None and path.exists(fileName):
             self.load(fileName)
             pass
         else:

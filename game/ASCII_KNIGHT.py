@@ -1,3 +1,12 @@
+# By submitting this assignment, I agree to the following:
+#   "Aggies do not lie, cheat, or steal, or tolerate those who do."
+#   "I have not given or received any unauthorized aid on this assignment."
+#
+# Name:         LEYOU CHEN
+# Section:      520
+# Assignment:   LAB 13 GROUP ASSIGNMENT
+# Date:         1 12 2024
+
 import keyboard
 from GameManager import GameManager
 import GuiManager as gui
@@ -12,6 +21,7 @@ HIT_PAUSE = 0.5
 
 # global variables
 keyin = q.Queue()
+gCounter = 0
 
 # input listen thread
 def input_listen():
@@ -38,17 +48,32 @@ display = gui.GuiManager(10, 10)
 
 # THE GAME ########################################################
 while True:
-    gCounter = 0
     # MENU SCREEN #################################################
     display.menu()
     menuInput = keyboard.read_key()
     # NEW GAME ####################################################
     if menuInput == "enter" or menuInput == "l":
-        if menuInput == "l": game = GameManager("saves/save1.txt")
+        # LOAD PREVIOUS SAVE ######################################
+        loadGame = False
+        loadedSave = gCounter # add proper save saving later
+        if menuInput == "l":
+            while True:
+                k = keyin.get() if not keyin.empty() else None
+                if k=="esc":
+                    break
+                if k and k.isdigit():
+                    try:
+                        game = GameManager(f"saves/save{int(k)}")
+                        loadGame = True
+                        loadedSave = int(k)
+                        break
+                    except: pass
+                display.loadGame()
+                t.sleep(REFRESH_RATE)
         else: game = GameManager()
         escaped = False
         # GAME LOOP ###############################################
-        while True:
+        while loadGame:
             # input
             k = keyin.get() if not keyin.empty() else None
             # escape menu logic
@@ -69,12 +94,13 @@ while True:
             if "dead" in (uOut, eOut): break
             t.sleep(REFRESH_RATE)
         # GAME OVER ###############################################
-        gCounter+=1
-        game.save(gCounter)
-        display.gameOver(f"save{gCounter}.txt", game.h, game.c)
-        while keyin.get()!="esc":
+        if loadGame:
+            gCounter+=1
+            game.save(gCounter)
             display.gameOver(f"save{gCounter}.txt", game.h, game.c)
-            t.sleep(REFRESH_RATE)
+            while keyin.get()!="esc":
+                display.gameOver(f"save{gCounter}.txt", game.h, game.c)
+                t.sleep(REFRESH_RATE)
     # EXIT ########################################################
     if menuInput == "x":
         display.endCredits()

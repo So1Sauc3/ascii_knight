@@ -35,6 +35,25 @@ class GuiManager:
         prt = self.getScreen("menu")
         for r in prt: print(r)
     
+    def loadGame(self):
+        self.cls()
+        
+        top, bot = self.getScreen("loadGame"), self.getScreen("loadGameExit")
+        mid = []
+        
+        saveNames = [entry.name for entry in os.scandir("saves") if entry.is_file()]
+        
+        for n in range(len(saveNames)):
+            row = self.getScreen("saveFile")[0]
+            row = row.replace("_", f"{saveNames[n]:<17}")
+            row = row.replace("@", f"{n}")
+            mid.append(row)
+        
+        for r in top: print(r)
+        for r in mid: print(r)
+        for r in bot: print(r)
+        
+    
     def game(self, game, uOut, eOut):
         self.cls()
         
