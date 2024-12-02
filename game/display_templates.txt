@@ -3,7 +3,8 @@ menu
 |       ASCII KNIGHT       |
 :-'----------------------'-;
 |#| NEW GAME     [ENTER] |#|
-|#| EXIT         [X]     |#|
+|#| LOAD GAME        [L] |#|
+|#| EXIT             [X] |#|
 \-"----------------------"-/
 
 loadGame
@@ -16,7 +17,7 @@ saveFile
 
 loadGameExit
 :-+----------------------+-;
-|#| EXIT         [ESC]   |#|
+|#| EXIT           [ESC] |#|
 \-"----------------------"-/
 
 gameScreenTop
