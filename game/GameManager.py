@@ -14,7 +14,7 @@ class GameManager:
         Sets player's health, mana, and coins to 10, 20, and 0, respectively.
         Sets entity and attack timers to 0.
         """
-        if fileName!=None and path.exists(fileName):
+        if fileName!=None: #  and path.exists(fileName)
             self.load(fileName)
             pass
         else:
@@ -124,16 +124,19 @@ class GameManager:
         # basic attack logic, may implement spells in future
         if self.attackTimer%GameManager.ATTACKCOOLDOWN==0:
             eOuts = "attackFailed"
+            hitSmth = False
             for e in self.r.entities:
                 for d in [(-1,0),(0,-1),(1,0),(0,1)]:
-                    if e.pos==(self.pPos[0]+d[0], self.pPos[1]+d[1]): eOuts = e.atb("h", -10)
+                    if e.pos==(self.pPos[0]+d[0], self.pPos[1]+d[1]):
+                        eOuts = e.atb("h", -10)
+                        hitSmth = True
             self.attackTimer = 1
             
             if self.combo==GameManager.COMBOLENGTH:
                 self.combo = 0
                 self.atb("m", 20, False)
             else:
-                self.combo += 1
+                if hitSmth: self.combo += 1
                 self.atb("m", -1)
             return eOuts
         return "cantAttack"

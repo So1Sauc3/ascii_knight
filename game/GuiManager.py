@@ -1,4 +1,4 @@
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 from random import choice
 import os
 # game width is 22
@@ -33,6 +33,7 @@ class GuiManager:
     def menu(self):
         self.cls()
         prt = self.getScreen("menu")
+        prt[1] = prt[1].replace("ASCII KNIGHT", f"{Fore.RED}ASCII{Style.RESET_ALL} {Fore.GREEN}KNIGHT{Style.RESET_ALL}")
         for r in prt: print(r)
     
     def loadGame(self):
@@ -57,12 +58,12 @@ class GuiManager:
     def game(self, game, uOut, eOut):
         self.cls()
         
-        r, pPos, h, m, c = game.r, game.pPos, game.h, game.m, game.c
+        r, pPos, h, m, c, combo = game.r, game.pPos, game.h, game.m, game.c, game.combo
         
         roomDisplay = ["".join([t.char for t in row]) for row in r.room]
         
         # debug depth
-        roomDisplay[2] = roomDisplay[2][:1] + f"{r.id:2}" + roomDisplay[2][3:]
+        #roomDisplay[2] = roomDisplay[2][:1] + f"{r.id:2}" + roomDisplay[2][3:]
         
         # door display
         if "N" not in r.connections: roomDisplay[0] = roomDisplay[0].replace(chr(9015), chr(9552))
@@ -87,9 +88,9 @@ class GuiManager:
         
         # GUI sections
         top = self.getScreen("gameScreenTop")
-        top[1] = top[1].replace("_", f"{str(h):>18}")
-        top[2] = top[2].replace("_", f"{str(m):>18}")
-        top[3] = top[3].replace("_", f"{str(c):>18}")
+        top[1] = top[1].replace("_", f"[{str(h):>2}]")
+        top[2] = top[2].replace("_", f"[{str(m):>2}]")
+        top[3] = top[3].replace("_", f"[{str(c):>2}]").replace("@", f"{combo}")
         edge = self.getScreen("gameScreenEdge")
         bottom = self.getScreen("gameScreenBottom")
         

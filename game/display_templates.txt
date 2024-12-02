@@ -22,9 +22,9 @@ loadGameExit
 
 gameScreenTop
 .--------------------------*
-|Health  _|
-|Mana    _|
-|Coin    _|
+|HEALTH _===============|
+|MANA   _===============|
+|COIN   _     STREAK [@]|
 :-'----------------------'-;
 
 gameScreenEdge

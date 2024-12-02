@@ -64,7 +64,7 @@ while True:
                     break
                 if k and k.isdigit():
                     try:
-                        game = GameManager(f"saves/save{int(k)}")
+                        game = GameManager(f"saves/save{int(k)}.txt")
                         saveID = int(k)
                         break
                     except: pass
@@ -93,7 +93,9 @@ while True:
                 display.game(game, uOut, eOut)
             
             if "hitEntity" in (uOut, eOut): t.sleep(HIT_PAUSE)
-            if "dmged" in (uOut, eOut): t.sleep(HIT_PAUSE)
+            if "dmged" in (uOut, eOut):
+                t.sleep(HIT_PAUSE)
+                game.combo = 0
             if "dead" in (uOut, eOut): break
             t.sleep(REFRESH_RATE)
         # GAME OVER ###############################################
